@@ -1,6 +1,8 @@
 package user
 
 import (
+	"fmt"
+
 	"github.com/La-Nouvelle-Epoch-18/lne-user/pkg/auth"
 	"github.com/La-Nouvelle-Epoch-18/lne-user/pkg/store"
 	"github.com/La-Nouvelle-Epoch-18/lne-user/pkg/types"
@@ -14,21 +16,31 @@ func NewService(s store.Store, a auth.Operator) *Service {
 }
 
 type Service struct {
-	store store.Store
-	auth  auth.Operator
+	secret string
+	store  store.Store
+	auth   auth.Operator
 }
 
 type LoginUserRequest struct {
-	Email    string
-	Password string
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 type LoginUserResponse struct {
-	Token string
-	User  *types.User
+	Token string      `json:"token"`
+	User  *types.User `json:"user"`
 }
 
 func (s *Service) LoginUser(req *LoginUserRequest) (*LoginUserResponse, error) {
+	switch {
+	case req.Email == "":
+		return nil, fmt.Errorf("email is empty")
+	case req.Password == "":
+		return nil, fmt.Errorf("password is empty")
+	default:
+		//
+	}
+
 	user, token, err := s.auth.AuthWithCredentials(req.Email, req.Password)
 	if err != nil {
 		return nil, err
@@ -40,12 +52,12 @@ func (s *Service) LoginUser(req *LoginUserRequest) (*LoginUserResponse, error) {
 	}, nil
 }
 
-type ValidateTokenRequest struct {
-	Token string
+type VerifyTokenRequest struct {
+	Token string `json:"token"`
 }
 
-type ValidateTokenResponse struct{}
+type VerifyTokenResponse struct{}
 
-func (s *Service) ValidateToken(req *ValidateTokenRequest) error {
-	return s.auth.VerifyToken(req.Token)
+func (s *Service) VerifyToken(token string) error {
+	return s.auth.VerifyToken(token)
 }

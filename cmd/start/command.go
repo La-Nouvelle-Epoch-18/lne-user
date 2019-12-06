@@ -17,14 +17,16 @@ import (
 )
 
 var (
-	port string
-	addr string
-	pgc  = &postgres.Config{}
+	port   string
+	addr   string
+	secret string
+	pgc    = &postgres.Config{}
 )
 
 func init() {
 	Cmd.Flags().StringVarP(&port, "port", "p", "9900", "port")
 	Cmd.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1", "")
+	Cmd.Flags().StringVarP(&secret, "secret", "s", "SUPER_FUCKING_SECRET", "")
 
 	Cmd.Flags().StringVar(&pgc.Name, "pg-name", "nuitdelinfo", "")
 	Cmd.Flags().StringVar(&pgc.Hostname, "pg-hostname", "localhost", "")
@@ -54,7 +56,7 @@ func startServer(*cobra.Command, []string) {
 		log.Fatalln(err)
 	}
 
-	authOp := auth.NewOperator(dbStore)
+	authOp := auth.NewOperator(secret, dbStore)
 
 	userService := userv1.NewService(dbStore, authOp)
 	authService := authv1.NewService(dbStore, authOp)

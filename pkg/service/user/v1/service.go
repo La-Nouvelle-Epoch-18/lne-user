@@ -21,10 +21,10 @@ type Service struct {
 }
 
 type CreateUserRequest struct {
-	Email    string
-	Username string
-	Password string
-	IsSchool bool
+	Email    string `json:"email"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	IsSchool bool   `json:"isSchool"`
 }
 
 func (s *Service) CreateUser(req *CreateUserRequest) error {
@@ -39,19 +39,19 @@ func (s *Service) CreateUser(req *CreateUserRequest) error {
 		//
 	}
 
-	kind := store.USER_SCHOOL
+	kind := store.USER_STUDENT
 	if req.IsSchool {
-		kind = store.USER_STUDENT
+		kind = store.USER_SCHOOL
 	}
 	return s.store.CreateUser(req.Email, req.Username, req.Password, kind)
 }
 
 type GetUsersRequest struct {
-	IDs []string
+	IDs []string `json:"ids"`
 }
 
 type GetUsersResponse struct {
-	Usernames []*types.User
+	Users []*types.User `json:"users"`
 }
 
 func (s *Service) GetUsers(req *GetUsersRequest) {
@@ -59,11 +59,11 @@ func (s *Service) GetUsers(req *GetUsersRequest) {
 }
 
 type GetUsernamesRequest struct {
-	IDs []string
+	IDs []string `json:"ids"`
 }
 
 type GetUsernamesResponse struct {
-	Usernames []string
+	Usernames []string `json:"usernames"`
 }
 
 func (s *Service) GetUsernames(req *GetUsernamesRequest) {

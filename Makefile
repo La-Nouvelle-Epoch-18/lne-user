@@ -3,3 +3,4 @@ run:
 
 build:
 	go build -o lne-user ./cmd/main.go
+

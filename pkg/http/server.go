@@ -16,6 +16,7 @@ func NewServer(api *apiv1.Api, addr string) *http.Server {
 	r.HandleFunc("/v1/user", apiv1.TestHandle).Methods("POST")
 	r.HandleFunc("/v1/auth/login", api.HandleAuthUser).Methods("POST")
 	r.HandleFunc("/v1/auth/logout", apiv1.TestHandle).Methods("POST")
+	r.HandleFunc("/v1/auth/verify", api.HandleVerifyToken).Methods("POST")
 	r.HandleFunc("/v1/auth/signup", api.HandleSignUp).Methods("POST")
 
 	return &http.Server{

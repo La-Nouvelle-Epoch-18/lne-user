@@ -1,0 +1,23 @@
+version: '3.2'
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=nuitdelinfo
+
+  api:
+    image: nouvelle0epoch/lne-user
+    entrypoint:
+      - /medtune/api
+      - start
+
+    ports:
+      - 9900:9900
+
+    depends_on:
+      - postgres
+
+    links:
+      - postgres:postgres
