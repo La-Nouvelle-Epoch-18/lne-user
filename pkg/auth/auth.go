@@ -40,11 +40,11 @@ func (o *operator) AuthWithCredentials(email, password string) (*types.User, str
 
 	user.Password = ""
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id":       user.ID,
-		"user_email":    user.Email,
-		"user_username": user.Username,
-		"user_type":     user.Type,
-		"nbf":           time.Now().Unix(),
+		"userId":    user.ID,
+		"userEmail": user.Email,
+		"username":  user.Username,
+		"userType":  user.Type,
+		"nbf":       time.Now().Unix(),
 	})
 
 	tokenStr, err := token.SignedString(o.secret)
@@ -62,7 +62,6 @@ func (o *operator) VerifyToken(tokenString string) error {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
 
-		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
 		return o.secret, nil
 	})
 	if err != nil {
