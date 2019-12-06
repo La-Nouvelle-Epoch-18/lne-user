@@ -6,7 +6,8 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=nuitdelinfo
-
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
   api:
     image: nouvelle0epoch/lne-user
     entrypoint:
@@ -22,3 +23,6 @@ services:
 
     links:
       - postgres:postgres
+
+volumes:
+  postgres-data: {}
