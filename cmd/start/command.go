@@ -3,6 +3,7 @@ package start
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -41,6 +42,8 @@ var Cmd = &cobra.Command{
 }
 
 func startServer(*cobra.Command, []string) {
+	time.Sleep(10 * time.Second)
+
 	engine, err := postgres.New(pgc)
 	if err != nil {
 		log.Fatalln(err)

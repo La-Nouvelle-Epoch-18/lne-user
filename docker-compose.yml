@@ -10,11 +10,12 @@ services:
   api:
     image: nouvelle0epoch/lne-user
     entrypoint:
-      - /medtune/api
+      - /app/lne-user
       - start
+      - --pg-hostname=postgres
 
     ports:
-      - 9900:9900
+      - 8080:9900
 
     depends_on:
       - postgres

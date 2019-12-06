@@ -46,6 +46,25 @@ func (s *Service) CreateUser(req *CreateUserRequest) error {
 	return s.store.CreateUser(req.Email, req.Username, req.Password, kind)
 }
 
+type GetUserRequest struct{}
+
+type GetUserResponse struct {
+	User *types.User `json:"user"`
+}
+
+func (s *Service) GetUser(token string) (*GetUserResponse, error) {
+	claims, err := s.auth.GetUserInfo(token)
+	if err != nil {
+		return nil, err
+	}
+
+	return &GetUserResponse{
+		User: &types.User{
+			ID: claims["userId"].(string),
+		},
+	}, nil
+}
+
 type GetUsersRequest struct {
 	IDs []string `json:"ids"`
 }

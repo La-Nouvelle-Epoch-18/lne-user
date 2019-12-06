@@ -12,8 +12,9 @@ import (
 )
 
 type Operator interface {
-	AuthWithCredentials(email, password string) (*types.User, string, error)
 	VerifyToken(token string) error
+	GetUserInfo(tokenString string) (jwt.MapClaims, error)
+	AuthWithCredentials(email, password string) (*types.User, string, error)
 }
 
 type operator struct {
@@ -72,4 +73,22 @@ func (o *operator) VerifyToken(tokenString string) error {
 		return nil
 	}
 	return fmt.Errorf("invalid token: %v", err)
+}
+
+func (o *operator) GetUserInfo(tokenString string) (jwt.MapClaims, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// Don't forget to validate the alg is what you expect:
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return o.secret, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims, nil
+	}
+	return nil, fmt.Errorf("invalid token")
 }
