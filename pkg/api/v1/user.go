@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 
 	userv1 "github.com/La-Nouvelle-Epoch-18/lne-user/pkg/service/user/v1"
@@ -51,5 +52,20 @@ func (a *Api) HandleGetUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *Api) HandleGetReadme(w http.ResponseWriter, r *http.Request) {
+	resp, err := http.Get("https://api.github.com/repos/La-Nouvelle-Epoch-18/Ine-front/readme")
+	if err != nil {
 
+	}
+	if err != nil {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, `{"error":"%s"}`, err.Error())
+		return
+	}
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, `{"error":"%s"}`, err.Error())
+		return
+	}
+	w.Write(b)
 }
