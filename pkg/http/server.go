@@ -13,11 +13,14 @@ func NewServer(api *apiv1.Api, addr string) *http.Server {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/v1", apiv1.TestHandle).Methods("GET")
-	r.HandleFunc("/v1/user", apiv1.TestHandle).Methods("POST")
+	r.HandleFunc("/v1/user", api.HandleGetUser).Methods("GET")
+
 	r.HandleFunc("/v1/auth/login", api.HandleAuthUser).Methods("POST")
 	r.HandleFunc("/v1/auth/logout", apiv1.TestHandle).Methods("POST")
 	r.HandleFunc("/v1/auth/verify", api.HandleVerifyToken).Methods("POST")
 	r.HandleFunc("/v1/auth/signup", api.HandleSignUp).Methods("POST")
+
+	r.HandleFunc("/v1/readme", api.HandleGetReadme).Methods("GET")
 
 	return &http.Server{
 		Handler:      r,

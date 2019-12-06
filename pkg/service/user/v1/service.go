@@ -53,15 +53,13 @@ type GetUserResponse struct {
 }
 
 func (s *Service) GetUser(token string) (*GetUserResponse, error) {
-	claims, err := s.auth.GetUserInfo(token)
+	user, err := s.auth.GetUserInfo(token)
 	if err != nil {
 		return nil, err
 	}
 
 	return &GetUserResponse{
-		User: &types.User{
-			ID: claims["userId"].(string),
-		},
+		User: user,
 	}, nil
 }
 

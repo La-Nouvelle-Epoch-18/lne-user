@@ -26,7 +26,7 @@ var (
 
 func init() {
 	Cmd.Flags().StringVarP(&port, "port", "p", "9900", "port")
-	Cmd.Flags().StringVarP(&addr, "addr", "a", "127.0.0.1", "")
+	Cmd.Flags().StringVarP(&addr, "addr", "a", "0.0.0.0", "")
 	Cmd.Flags().StringVarP(&secret, "secret", "s", "SUPER_FUCKING_SECRET", "")
 
 	Cmd.Flags().StringVar(&pgc.Name, "pg-name", "nuitdelinfo", "")

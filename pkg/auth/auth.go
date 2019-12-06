@@ -13,7 +13,7 @@ import (
 
 type Operator interface {
 	VerifyToken(token string) error
-	GetUserInfo(tokenString string) (jwt.MapClaims, error)
+	GetUserInfo(tokenString string) (*types.User, error)
 	AuthWithCredentials(email, password string) (*types.User, string, error)
 }
 
@@ -75,7 +75,7 @@ func (o *operator) VerifyToken(tokenString string) error {
 	return fmt.Errorf("invalid token: %v", err)
 }
 
-func (o *operator) GetUserInfo(tokenString string) (jwt.MapClaims, error) {
+func (o *operator) GetUserInfo(tokenString string) (*types.User, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -88,7 +88,13 @@ func (o *operator) GetUserInfo(tokenString string) (jwt.MapClaims, error) {
 		return nil, err
 	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return claims, nil
+		return &types.User{
+			ID:       claims["userId"].(string),
+			Username: claims["username"].(string),
+			Email:    claims["userEmail"].(string),
+			Type:     claims["userType"].(string),
+		}, nil
 	}
+
 	return nil, fmt.Errorf("invalid token")
 }

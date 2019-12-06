@@ -28,3 +28,28 @@ func (a *Api) HandleSignUp(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{"success":true}`)
 }
+
+func (a *Api) HandleGetUser(w http.ResponseWriter, r *http.Request) {
+	header := r.Header.Get("Authorization")
+	token, err := getTokenFromHeader(header)
+	if err != nil {
+		w.WriteHeader(http.StatusForbidden)
+		fmt.Fprintf(w, `{"error":"%s"}`, header)
+		return
+	}
+
+	user, err := a.user.GetUser(token)
+	if err != nil {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, `{"error":"%s"}`, err.Error())
+		return
+	}
+
+	data, _ := json.Marshal(user)
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+func (a *Api) HandleGetReadme(w http.ResponseWriter, r *http.Request) {
+
+}

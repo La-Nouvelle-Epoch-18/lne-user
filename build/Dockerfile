@@ -9,3 +9,4 @@ FROM alpine
 WORKDIR /app
 COPY --from=build-env /src/lne-user /app/
 ENTRYPOINT ./app/lne-user
+EXPOSE 9900
