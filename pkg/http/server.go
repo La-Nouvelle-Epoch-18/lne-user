@@ -42,7 +42,9 @@ func NewServer(api *apiv1.Api, addr string) *http.Server {
 	r := mux.NewRouter()
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://usr.lne.mff.dev", "https://nouvelle-epoch.mff.dev"},
+		AllowedMethods:   []string{"*"},
+		AllowedHeaders:   []string{"*"},
+		AllowedOrigins:   []string{"*", "http://usr.lne.mff.dev", "https://nouvelle-epoch.mff.dev"},
 		AllowCredentials: true,
 		Debug:            true,
 	})
@@ -56,7 +58,7 @@ func NewServer(api *apiv1.Api, addr string) *http.Server {
 	r.HandleFunc("/v1/auth/verify", api.HandleVerifyToken).Methods("POST")
 	r.HandleFunc("/v1/auth/signup", api.HandleSignUp).Methods("POST")
 
-	r.HandleFunc("/v1/readme", api.HandleGetReadme).Methods("GET", "OPTIONS")
+	r.HandleFunc("/v1/readme", api.HandleGetReadme).Methods("GET")
 
 	return &http.Server{
 		Handler:      c.Handler(r),
