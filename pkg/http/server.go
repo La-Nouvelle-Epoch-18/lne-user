@@ -5,14 +5,13 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/rs/cors"
 
 	apiv1 "github.com/La-Nouvelle-Epoch-18/lne-user/pkg/api/v1"
 )
 
 var (
 	corsHeaders = "Content-Type,Accept,Authorization"
-	corsMethods = "GET,POST,DELETE"
+	corsMethods = "GET,POST,DELETE,OPTIONS"
 )
 
 // corsHandler
@@ -29,7 +28,6 @@ func httpWrapper(h http.Handler) http.Handler {
 
 			if r.Method == "OPTIONS" && r.Header.Get("Access-Control-Request-Method") != "" {
 				corsHandler(w, r)
-
 				return
 			}
 		}
@@ -40,14 +38,6 @@ func httpWrapper(h http.Handler) http.Handler {
 
 func NewServer(api *apiv1.Api, addr string) *http.Server {
 	r := mux.NewRouter()
-
-	c := cors.New(cors.Options{
-		AllowedMethods:   []string{"*"},
-		AllowedHeaders:   []string{"*"},
-		AllowedOrigins:   []string{"*", "http://usr.lne.mff.dev", "https://nouvelle-epoch.mff.dev"},
-		AllowCredentials: true,
-		Debug:            true,
-	})
 
 	r.HandleFunc("/v1", apiv1.TestHandle).Methods("GET")
 	r.HandleFunc("/v1/user", api.HandleGetUser).Methods("GET")
@@ -61,7 +51,7 @@ func NewServer(api *apiv1.Api, addr string) *http.Server {
 	r.HandleFunc("/v1/readme", api.HandleGetReadme).Methods("GET")
 
 	return &http.Server{
-		Handler:      c.Handler(r),
+		Handler:      httpWrapper(r),
 		Addr:         addr,
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
