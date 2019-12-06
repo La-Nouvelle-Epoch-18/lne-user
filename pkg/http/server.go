@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	corsHeaders = "Content-Type,Accept,Authorization"
+	corsHeaders = "Content-Type,Accept,Authorization,access-control-allow-headers,access-control-allow-origin,content-type"
 	corsMethods = "GET,POST,DELETE,OPTIONS"
 )
 
