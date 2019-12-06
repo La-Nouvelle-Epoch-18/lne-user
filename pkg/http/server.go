@@ -2,7 +2,6 @@ package server
 
 import (
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/gorilla/handlers"
@@ -14,8 +13,8 @@ import (
 func NewServer(api *apiv1.Api, addr string) *http.Server {
 	r := mux.NewRouter()
 
-	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With"})
-	originsOk := handlers.AllowedOrigins([]string{os.Getenv("ORIGIN_ALLOWED")})
+	headersOk := handlers.AllowedHeaders([]string{"*"})
+	originsOk := handlers.AllowedOrigins([]string{"*"})
 	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
 
 	r.HandleFunc("/v1", apiv1.TestHandle).Methods("GET")

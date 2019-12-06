@@ -72,8 +72,16 @@ type GetUsersResponse struct {
 }
 
 func (s *Service) GetUsers(req *GetUsersRequest) ([]*types.User, error) {
-	//users, err := s.store.ListUsers()
-	return nil, nil
+	var users []*types.User
+
+	for _, id := range req.IDs {
+		user, err := s.store.GetUserByID(id)
+		if err != nil {
+			return nil, fmt.Errorf("error retrieving id %s from database: %v", id, err)
+		}
+		users = append(users, user)
+	}
+	return users, nil
 }
 
 type GetUsernamesRequest struct {

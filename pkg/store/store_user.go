@@ -23,6 +23,8 @@ type UserStore interface {
 	// Select user by email
 	GetUserByEmail(string) (*types.User, error)
 
+	GetUserByID(string) (*types.User, error)
+
 	// Insert user with fullname,username,email,password,accountType
 	CreateUser(string, string, string, string) error
 
@@ -84,6 +86,21 @@ func (s *store) GetUserByUsername(username string) (*types.User, error) {
 func (s *store) GetUserByEmail(email string) (*types.User, error) {
 	user := &types.User{}
 	has, err := s.Engine.Where("email = ?", email).Get(user)
+	if err != nil {
+		return nil, err
+	}
+
+	if !has {
+		return nil, fmt.Errorf("user not found")
+	}
+
+	return user, nil
+}
+
+// GetUserByEmail select user by it email
+func (s *store) GetUserByID(id string) (*types.User, error) {
+	user := &types.User{}
+	has, err := s.Engine.Where("id = ?", id).Get(user)
 	if err != nil {
 		return nil, err
 	}
