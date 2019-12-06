@@ -16,5 +16,5 @@ RUN cd /src && \
 # final stage
 FROM alpine
 WORKDIR /app
-COPY --from=build-env /src/lne-user /app/
+COPY --from=build-env /src/lne-user /app
 ENTRYPOINT ./lne-user start
