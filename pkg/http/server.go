@@ -42,8 +42,8 @@ func NewServer(api *apiv1.Api, addr string) *http.Server {
 	r := mux.NewRouter()
 
 	headersOk := handlers.AllowedHeaders([]string{"*"})
-	originsOk := handlers.AllowedOrigins([]string{"http://127.0.0.1/", "https://usr.lne.mff.dev/", "https://nouevelle-epoch.mff.dev/"})
-	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
+	originsOk := handlers.AllowedOrigins([]string{"*"})
+	methodsOk := handlers.AllowedMethods([]string{"*"})
 
 	r.HandleFunc("/v1", apiv1.TestHandle).Methods("GET")
 	r.HandleFunc("/v1/user", api.HandleGetUser).Methods("GET")
