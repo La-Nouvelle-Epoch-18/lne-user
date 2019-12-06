@@ -1,5 +1,4 @@
-# build stage
-FROM golang:alpine AS build-env
+FROM golang:alpine
 RUN apk --no-cache add \
     build-base \
     git \
@@ -13,8 +12,4 @@ RUN cd /src && \
     build -o lne-user \
     cmd/main.go
 
-# final stage
-FROM alpine
-WORKDIR /app
-COPY --from=build-env /src/lne-user /app
 ENTRYPOINT ./lne-user start
