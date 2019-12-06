@@ -6,6 +6,7 @@ type User struct {
 	Email       string `json:"email" xorm:"varchar(64) not null unique"`
 	Username    string `json:"username" xorm:"varchar(32) not null unique"`
 	Password    string `json:"password" xorm:"varchar(64) not null"`
+	Reputation  int    `json:"reputation"`
 	Type        string `json:"type" xorm:"varchar(32) not null default 'student'"`
 	Description string `json:"description" xorm:"varchar(128)"`
 }

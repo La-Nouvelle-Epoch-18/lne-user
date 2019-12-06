@@ -10,6 +10,7 @@ require (
 	github.com/hashicorp/go-multierror v1.0.0
 	github.com/lib/pq v1.0.0
 	github.com/satori/go.uuid v1.2.0
+	github.com/sirupsen/logrus v1.2.0
 	github.com/spf13/cobra v0.0.5
 	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
 )
