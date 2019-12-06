@@ -71,8 +71,9 @@ type GetUsersResponse struct {
 	Users []*types.User `json:"users"`
 }
 
-func (s *Service) GetUsers(req *GetUsersRequest) {
-
+func (s *Service) GetUsers(req *GetUsersRequest) ([]*types.User, error) {
+	//users, err := s.store.ListUsers()
+	return nil, nil
 }
 
 type GetUsernamesRequest struct {

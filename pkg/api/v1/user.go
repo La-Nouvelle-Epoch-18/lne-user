@@ -51,11 +51,32 @@ func (a *Api) HandleGetUser(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+func (a *Api) HandleGetUsers(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	var req *userv1.GetUsersRequest
+	err := decoder.Decode(&req)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, `{"error":"%s"}`, err.Error())
+		return
+	}
+
+	users, err := a.user.GetUsers(req)
+	if err != nil {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, `{"error":"%s"}`, err.Error())
+		return
+	}
+
+	data, _ := json.Marshal(userv1.GetUsersResponse{
+		Users: users,
+	})
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 func (a *Api) HandleGetReadme(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.Get("https://api.github.com/repos/La-Nouvelle-Epoch-18/Ine-front/readme")
-	if err != nil {
-
-	}
 	if err != nil {
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprintf(w, `{"error":"%s"}`, err.Error())
